@@ -39,7 +39,7 @@ int main()
   /**
    * We do not need Integration -> works well without it
    */
-  pid.Init(0.27,0.0,9);
+  pid.Init(0.15,0.001,6);
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -88,12 +88,12 @@ int main()
             steer_value=1;
           }
 
-          std::cout << "targetSpeed: " << targetSpeed << " speed_cte: " << speed_cte << "speed_value"<<speed_value<< std::endl;
+          //std::cout << "targetSpeed: " << targetSpeed << " speed_cte: " << speed_cte << "speed_value"<<speed_value<< std::endl;
 
            if (fabs(cte) > 0.6 && fabs(angle) > 5.5 && speed > 40.0) {
             throttle = -1.5;
           } else {
-            throttle = 0.75;
+            throttle = 1;
           }
 
           // DEBUG
