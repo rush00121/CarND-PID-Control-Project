@@ -21,10 +21,6 @@ void PID::Init(double Kp, double Ki, double Kd) {
     this->p_error = 0 ;
     this->d_error = 0 ;
     this->i_error = 0 ;
-    this->dpp = 0.1 ;
-    this->dpi = 0.1 ;
-    this->dpd = 0.1 ;
-
 }
 
 void PID::UpdateError(double cte) {
@@ -38,11 +34,11 @@ double PID::TotalError() {
 }
 void PID::twiddle(double tolerance, double cte) {
 
-  double p[] = {Kp,Kd};
-  double dp[] = {p_error, d_error};
+  double p[] = {Kp,Kd,Ki};
+  double dp[] = {p_error, d_error,i_error};
   iterations++;
 
-  std::cout<<"Kp:"<<Kp<<" Ki:"<<Ki<<" Kd:"<<Kd<<" error:"<<bestError<<" dpp:"<<dpp<<" dpi:"<<dpi<<" dpd:"<<dpd<<" i:"<<twiddle_param<<endl;
+  std::cout<<"Kp:"<<Kp<<" Ki:"<<Ki<<" Kd:"<<Kd<<" error:"<<bestError<<" i:"<<twiddle_param<<endl;
 
   if (fabs(dp[0]) + fabs(dp[1]) > tolerance) {
     int i = twiddle_param ;
@@ -56,7 +52,7 @@ void PID::twiddle(double tolerance, double cte) {
           bestError = cte;
           dp[i] = dp[i] * 1.1;
           p[i] =p[i]+ dp[i];
-          twiddle_param=(twiddle_param+1)%2;
+          twiddle_param=(twiddle_param+1)%3;
           state = 0 ;
         }else{
           p[i] = p[i] - (2 * dp[i]);
@@ -72,7 +68,7 @@ void PID::twiddle(double tolerance, double cte) {
           dp[i] = dp[i] * 0.9;
           p[i] = p[i] +dp[i];
         }
-        twiddle_param=(twiddle_param+1)%2;
+        twiddle_param=(twiddle_param+1)%3;
         state = 0 ;
         break;
     }
@@ -95,8 +91,14 @@ void PID::twiddle(double tolerance, double cte) {
     }
 
     if(i==1){
-      if(p[i]<2){
-        p[i]=2;
+      if(p[i]<5){
+        p[i]=5;
+      }
+    }
+
+    if(i==2) {
+      if(p[i]>0.001){
+        p[i]=0.01;
       }
     }
 
@@ -104,9 +106,7 @@ void PID::twiddle(double tolerance, double cte) {
    // Ki = p[1];
     Kd = p[1];
 
-    dpp = dp[0];
-    //dpi = dp[1];
-    dpd = dp[1];
+    Ki = p[2];
 
   } else {
     std::cout<<"*****************Final Params****** = KP:" << Kp << " KI:" << Ki << " KD:" <<Kd <<endl;

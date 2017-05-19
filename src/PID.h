@@ -17,14 +17,6 @@ public:
   double Ki;
   double Kd;
 
-  double Kp_tw;
-  double Ki_tw;
-  double Kd_tw;
-
-  double dpp;
-  double dpi;
-  double dpd;
-
   int twiddle_param ;
 
   int state ;

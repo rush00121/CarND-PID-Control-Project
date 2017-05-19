@@ -39,7 +39,7 @@ int main()
   /**
    * We do not need Integration -> works well without it
    */
-  pid.Init(0.15,0.001,6);
+  pid.Init(0.15,0.0,6.7);
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -74,7 +74,7 @@ int main()
           double previous_cte = pid.p_error;
           pid.UpdateError(cte);
           if(TWIDDLE){
-            pid.twiddle(1e-6,cte);
+            pid.twiddle(0.03,cte);
             pid.i_error+=cte;
             steer_value = ( -pid.Kp * cte - pid.Kd*pid.d_error- pid.Ki*pid.i_error);
             pid.p_error = cte;
