@@ -82,3 +82,53 @@ that's just a guess.
 
 One last note here: regardless of the IDE used, every submitted project must
 still be compilable with cmake and make./
+
+
+# Reflections : 
+## Effects of PID params : 
+
+P : The proportional term Kp  affects the steering angle of the car with respect to the Cross Track Error (CTE). A higher Kp will 
+result into higher correction towards reduction of the CTE and will result unstable oscillations of the car. A lower Kp
+will result into a larger turning radius on sharp turns and will again not work. 
+The Kp param should be tuned in proportion that works best at higher speeds, sharp turns and straight roads while having 
+minimum instability / oscillations.
+
+I : The Integration term Ki is used to correct the bias of the steering angle. In this simulator, I did not find any bias 
+and hence have kept the Ki term to 0 . 
+
+D : The derivative term Kd is used to dampen the oscillation that is caused by the Kp term and allows the car to attain more 
+speed. A lower Kd term will result into more oscillations and a higher Kd term will result into more dampning and the car 
+will not be able to correct itself faster in cases of sharper turns. 
+
+
+## Choosing the PID terms 
+
+I have implemented twiddle as a state machine that keeps on getting the CTE and adjusts the PID parameters to get the most 
+optimal result. However, in my experience, twiddle can fail to converge / take a long time to converge if the boundaries of 
+the parameters are not well defined. 
+
+Hence I first manually tried to find a decent range of lower and upper bound for each of the PID parameters. And then I ran 
+twiddle within the parameters limits . That helped me to converge faster . 
+
+I have finally chosen my 
+Kp parameter = 0.15 
+Ki parameter = 0 
+Kd parameter = 6.7 
+
+These parameters yielded me the maximum speed while maintaining road safety.
+
+## Simulation : 
+
+Below is a link of the video of the simulation. 
+
+https://www.youtube.com/watch?v=9hoM2dRIvX0&feature=youtu.be
+
+There are a couple of points to be noted about the simulation. 
+
+The simulation depends on the machine on which it is running / what resolution is being used and the graphics quality i.e Fastest,Fantastic etc. 
+
+This is because the latency between the simulation and the program will vary with all the above parameters. And hence will the performance
+of the simulation. I have chosen 1024x768 resolution and the Fastest option for the graphics quality.
+
+
+
