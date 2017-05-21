@@ -91,9 +91,9 @@ int main()
           //std::cout << "targetSpeed: " << targetSpeed << " speed_cte: " << speed_cte << "speed_value"<<speed_value<< std::endl;
 
            if (fabs(cte) > 0.6 && fabs(angle) > 5.5 && speed > 40.0) {
-            throttle = -1.5;
+            throttle = -1;
           } else {
-            throttle = 1;
+            throttle = 0.7;
           }
 
           // DEBUG
